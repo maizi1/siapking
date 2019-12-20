@@ -12,7 +12,7 @@ export default class Helloworld extends cc.Component {
 
     onLoad() {
         i18n.init('zh');
-        this.score.string = cc.sys.localStorage.getItem('score') || ''; 
+        this.score.string = cc.sys.localStorage.getItem('score') || 'F'; 
         this.handlerGif(this.gif.children);
     }
 
@@ -47,5 +47,9 @@ export default class Helloworld extends cc.Component {
 
     startGame() {
         cc.director.loadScene('solo');
+    }
+
+    goToStandings() {
+        cc.director.loadScene('standings');
     }
 }

@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "0c653e70-38ea-45ae-86bc-53c755c068d9",
+  "uuid": "1006cd27-ff0a-485d-ad2d-d9cb4959286f",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -9,10 +9,10 @@
   "packable": true,
   "platformSettings": {},
   "subMetas": {
-    "03-1-mdpi": {
+    "FBrank_bg-mdpi": {
       "ver": "1.0.4",
-      "uuid": "99f3fdeb-47ae-4a53-b1ad-e9976a618cf0",
-      "rawTextureUuid": "0c653e70-38ea-45ae-86bc-53c755c068d9",
+      "uuid": "3e89f9cc-54e4-4870-b9d0-c5fcb5af0627",
+      "rawTextureUuid": "1006cd27-ff0a-485d-ad2d-d9cb4959286f",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
