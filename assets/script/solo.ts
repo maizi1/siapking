@@ -27,6 +27,33 @@ export default class Solo extends cc.Component {
     @property(cc.Node)
     homeBtn: cc.Node;
 
+    @property(cc.AudioClip)
+    readyGoAudio: cc.AudioClip;
+    @property(cc.AudioClip)
+    slapAudio: cc.AudioClip;
+    @property(cc.AudioClip)
+    whistleAudio: cc.AudioClip;
+    @property(cc.AudioClip)
+    outAudio: cc.AudioClip;
+    @property(cc.AudioClip)
+    clickAudio: cc.AudioClip;
+    @property(cc.AudioClip)
+    scoreAudio1: cc.AudioClip;
+    @property(cc.AudioClip)
+    scoreAudio2: cc.AudioClip;
+    @property(cc.AudioClip)
+    scoreGrade01: cc.AudioClip;
+    @property(cc.AudioClip)
+    scoreGrade02: cc.AudioClip;
+    @property(cc.AudioClip)
+    scoreGrade03: cc.AudioClip;
+    @property(cc.AudioClip)
+    scoreGrade04: cc.AudioClip;
+    @property(cc.AudioClip)
+    scoreGrade05: cc.AudioClip;
+    @property(cc.AudioClip)
+    scoreGrade06: cc.AudioClip;
+
     score: string = '';
     maxSlapNum: number = 37;
     slapNum: number = 0;
@@ -53,7 +80,7 @@ export default class Solo extends cc.Component {
             .delay(0.3)
             .by(0.4, { position: cc.v2(-360) })
             .start();
-        console.log(this.slapNumLabel);
+        cc.audioEngine.playEffect(this.readyGoAudio, false);
     }
 
     start() {}
@@ -62,7 +89,7 @@ export default class Solo extends cc.Component {
         if (this.isStart) {
             this.onTimer(dt);
         }
-        if (this.slapNum > 8 && this.slapNumNode.opacity > 0) {
+        if (this.slapNum > 8 && this.slapNumNode.opacity > 0 && !this.isOut) {
             this.slapNumNode.opacity -= 40;
         }
         if (this.slapNum > this.maxSlapNum && !this.isOut) {
@@ -73,26 +100,28 @@ export default class Solo extends cc.Component {
     writeScore() {
         const { localStorage } = cc.sys;
         const date = new Date();
-        let fmt = 'yyyy-MM-dd hh:mm'
+        let fmt = 'yyyy-MM-dd hh:mm';
         var o = {
-            "M+" : date.getMonth()+1,                 //月份
-            "d+" : date.getDate(),                    //日
-            "h+" : date.getHours(),                   //小时
-            "m+" : date.getMinutes(),                 //分
-            "s+" : date.getSeconds(),                 //秒
-            "q+" : Math.floor((date.getMonth()+3)/3), //季度
-            "S"  : date.getMilliseconds()             //毫秒
-          };
-        if(/(y+)/.test(fmt)){
-            fmt=fmt.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));
-          }
-                
-          for(var k in o){
-            if(new RegExp("("+ k +")").test(fmt)){
-              fmt = fmt.replace(
-                RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));  
-            }       
-          }
+            'M+': date.getMonth() + 1, //月份
+            'd+': date.getDate(), //日
+            'h+': date.getHours(), //小时
+            'm+': date.getMinutes(), //分
+            's+': date.getSeconds(), //秒
+            'q+': Math.floor((date.getMonth() + 3) / 3), //季度
+            S: date.getMilliseconds(), //毫秒
+        };
+        if (/(y+)/.test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+        }
+
+        for (var k in o) {
+            if (new RegExp('(' + k + ')').test(fmt)) {
+                fmt = fmt.replace(
+                    RegExp.$1,
+                    RegExp.$1.length == 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length)
+                );
+            }
+        }
         const scorsObj = {
             day: fmt,
             when: this.onTimer(0),
@@ -106,6 +135,7 @@ export default class Solo extends cc.Component {
     }
 
     goToHome() {
+        cc.audioEngine.playEffect(this.clickAudio, false);
         cc.director.loadScene('home');
     }
 
@@ -121,6 +151,7 @@ export default class Solo extends cc.Component {
             this.isStart = true;
             front.active = false;
         }
+        cc.audioEngine.playEffect(this.slapAudio, false);
         if (this.slapNum++ % 2 === 0) {
             slapLeft.active = true;
             slapRight.active = false;
@@ -129,8 +160,6 @@ export default class Solo extends cc.Component {
             slapRight.active = true;
         }
         this.slapNumLabel.string = '' + this.slapNum;
-        console.log(this.slapNum);
-
     }
 
     onDone() {
@@ -144,15 +173,15 @@ export default class Solo extends cc.Component {
             this.writeScore();
         } else {
             // 失败
-            // this.onOut();
-            this.onScore();
+            this.onOut();
+            // this.onScore();
         }
     }
 
     onScore() {
         const { tween } = cc;
         const ss = this.onTimer(0)[0];
-        console.log(this.scoreNode.children)
+
         const [
             ,
             { children: modal1s },
@@ -170,12 +199,16 @@ export default class Solo extends cc.Component {
             .to(0.4, { position: cc.v2(0, 74) }, { easing: 'sineInOut' })
             .by(0.6, { position: cc.v2(35, 10) }, { easing: 'sineOut' })
             .start();
+        this.scheduleOnce(() => {
+            cc.audioEngine.playEffect(this.scoreAudio1, false);
+        }, 0.2);
         for (let i = 0, len = scoreRuler.length; i < len; i++) {
             if (ss >= scoreRuler[i]) {
                 leftShift = i;
                 break;
             }
         }
+
         for (let i = 0; i <= leftShift; i++) {
             if (i) {
                 tween(ruler)
@@ -186,8 +219,12 @@ export default class Solo extends cc.Component {
                     .delay(0.3 * i + 0.4)
                     .by(0, { position: cc.v2(-50, 0) })
                     .start();
+                this.scheduleOnce(() => {
+                    cc.audioEngine.playEffect(this['scoreGrade0' + i], false);
+                }, 0.3 * i + 0.4);
             } else {
                 rulerBox.active = true;
+                cc.audioEngine.playEffect(this.scoreGrade01, false);
             }
 
             tween(modal1s[i])
@@ -205,6 +242,7 @@ export default class Solo extends cc.Component {
             .to(0.3, { scale: 1 })
             .start();
         this.score = scoreStrings[leftShift];
+        this.slapNumLabel.node.opacity = 255;
     }
 
     onOut() {
@@ -236,14 +274,21 @@ export default class Solo extends cc.Component {
             .delay(1.6)
             .to(0.4, { scale: 0.75 }, { easing: 'sineInOut' })
             .start();
+        cc.audioEngine.playEffect(this.whistleAudio, false);
+        this.scheduleOnce(() => {
+            cc.audioEngine.playEffect(this.outAudio, false);
+        }, 0.8);
+        this.slapNumLabel.node.opacity = 255;
     }
 
     onReset() {
+        cc.audioEngine.playEffect(this.clickAudio, false);
         cc.director.resume();
         cc.director.loadScene('solo');
     }
 
     onPause() {
+        cc.audioEngine.playEffect(this.clickAudio, false);
         if (this.isPause) {
             cc.director.resume();
             this.pauseNode.active = false;

@@ -213,7 +213,7 @@
       "array": [
         0,
         0,
-        367.19476318359375,
+        469.5806579589844,
         0,
         0,
         0,
@@ -5065,7 +5065,7 @@
       "__id__": 102
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 104
@@ -7055,8 +7055,8 @@
       "width": 360,
       "height": 568
     },
-    "_fitWidth": false,
-    "_fitHeight": true,
+    "_fitWidth": true,
+    "_fitHeight": false,
     "_id": "aeWe14pt1JkqJKbZCjuX48"
   },
   {
@@ -7099,6 +7099,48 @@
     },
     "scoreNode": {
       "__id__": 73
+    },
+    "homeBtn": {
+      "__id__": 133
+    },
+    "readyGoAudio": {
+      "__uuid__": "bb3a76ee-d6d2-4c54-b05b-4d3291cad25b"
+    },
+    "slapAudio": {
+      "__uuid__": "30fd9801-0f2b-4e42-b0a0-d73282eea887"
+    },
+    "whistleAudio": {
+      "__uuid__": "744650e1-9a84-449c-ac55-224417d446ed"
+    },
+    "outAudio": {
+      "__uuid__": "571e94b7-1992-4a71-980a-8b88c4fe17bf"
+    },
+    "clickAudio": {
+      "__uuid__": "67ee0c9a-74d2-4e05-b6a6-89fc2cb0965e"
+    },
+    "scoreAudio1": {
+      "__uuid__": "fed25f0e-bf2c-4b9d-a256-b3b5d96b1ebe"
+    },
+    "scoreAudio2": {
+      "__uuid__": "26082126-4c45-410b-9ecd-c8c66b7ebf78"
+    },
+    "scoreGrade01": {
+      "__uuid__": "a61c7527-bbc5-44d3-ad19-0dc13b656d74"
+    },
+    "scoreGrade02": {
+      "__uuid__": "a0304692-77e8-45fb-a4ef-f67ce62fe219"
+    },
+    "scoreGrade03": {
+      "__uuid__": "55119f1a-d466-4235-843c-fd9f5cd9397c"
+    },
+    "scoreGrade04": {
+      "__uuid__": "94bd0c09-2a18-42b3-a801-80b8b1747474"
+    },
+    "scoreGrade05": {
+      "__uuid__": "10338a90-acb6-4a77-a4e9-c2a4970649f5"
+    },
+    "scoreGrade06": {
+      "__uuid__": "008455db-0163-4304-a899-6219a8b93c78"
     },
     "_id": "b2V24dUU5E1bbrOb9EqvQJ"
   }
