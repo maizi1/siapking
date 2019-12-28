@@ -35,6 +35,8 @@ export default class Versus extends cc.Component {
     loadUser1: cc.Node;
     @property(cc.Node)
     loadUser2: cc.Node;
+    @property(cc.Node)
+    skeletons: cc.Node;
 
     @property(cc.AudioClip)
     screamAudio: cc.AudioClip;
@@ -79,6 +81,7 @@ export default class Versus extends cc.Component {
     onLoad() {
         this.loading(this.loadUser1.children, 'summer', Math.random() < 0.5 ? 1.5 : -1.5);
         this.loading(this.loadUser2.children, 'windLive', 0);
+        this.playAnimation();
     }
 
     init() {
@@ -162,6 +165,11 @@ export default class Versus extends cc.Component {
     }
     start() {}
 
+    playAnimation() {
+        const [pk, match] = this.skeletons.children;
+        pk.getComponent(sp.Skeleton).setAnimation(10, 'animation', false);
+        // pk.getComponent(sp.Skeleton).setAnimation(1, 'animation', false);
+    }
     onOut() {
         const { out } = this;
         const { children } = out;

@@ -1,0 +1,134 @@
+{
+"skeleton": { "hash": "V3AhHeUFRL7AF9s2tj24EwbpIPE", "spine": "3.7.87", "width": 0, "height": 0, "images": "../Match/", "audio": "" },
+"bones": [
+	{ "name": "root" },
+	{ "name": "IsMatching", "parent": "root" },
+	{ "name": "MatchingComplete", "parent": "root" },
+	{ "name": "MatchingAnim", "parent": "root", "scaleX": 5, "scaleY": 5 }
+],
+"slots": [
+	{ "name": "Bg-Matching", "bone": "IsMatching" },
+	{ "name": "Bg-MatchComplete", "bone": "MatchingComplete" },
+	{ "name": "MatchingAnim", "bone": "MatchingAnim" }
+],
+"skins": {
+	"default": {
+		"Bg-MatchComplete": {
+			"Bg-ReadyFight": { "x": 0.5, "width": 173, "height": 40 }
+		},
+		"Bg-Matching": {
+			"Bg-Matching": {
+				"type": "mesh",
+				"uvs": [ 0.74227, 0.99999, 0, 1, 0, 0, 0.74227, 0 ],
+				"triangles": [ 0, 1, 2, 0, 2, 3 ],
+				"vertices": [ 80.92, -37, -167, -37, -167, 37, 80.92, 37 ],
+				"hull": 4,
+				"edges": [ 0, 2, 2, 4, 4, 6, 0, 6 ],
+				"width": 334,
+				"height": 74
+			},
+			"Bg-Matching2": {
+				"type": "mesh",
+				"path": "Bg-Matching",
+				"uvs": [ 0.82706, 1, 0, 1, 0, 0, 0.81222, 0 ],
+				"triangles": [ 1, 2, 3, 1, 3, 0 ],
+				"vertices": [ 109.24, -37, -167, -37, -167, 37, 104.28, 37 ],
+				"hull": 4,
+				"edges": [ 0, 2, 2, 4, 4, 6, 0, 6 ],
+				"width": 334,
+				"height": 74
+			},
+			"Bg-Matching3": {
+				"type": "mesh",
+				"path": "Bg-Matching",
+				"uvs": [ 0.92457, 1, 0, 1, 0, 0, 0.90973, 0 ],
+				"triangles": [ 1, 2, 3, 1, 3, 0 ],
+				"vertices": [ 141.8, -37, -167, -37, -167, 37, 136.85, 37 ],
+				"hull": 4,
+				"edges": [ 0, 2, 2, 4, 4, 6, 0, 6 ],
+				"width": 334,
+				"height": 74
+			},
+			"Bg-Matching4": {
+				"type": "mesh",
+				"path": "Bg-Matching",
+				"uvs": [ 1, 1, 0, 1, 0, 0, 1, 0 ],
+				"triangles": [ 0, 1, 2, 3, 0, 2 ],
+				"vertices": [ 167, -37, -167, -37, -167, 37, 167, 37 ],
+				"hull": 4,
+				"edges": [ 0, 2, 2, 4, 4, 6, 0, 6 ],
+				"width": 334,
+				"height": 74
+			}
+		},
+		"MatchingAnim": {
+			"images/MatchingAnim_01": { "width": 22, "height": 22 },
+			"images/MatchingAnim_02": { "width": 22, "height": 22 },
+			"images/MatchingAnim_03": { "width": 22, "height": 22 },
+			"images/MatchingAnim_04": { "width": 22, "height": 22 },
+			"images/MatchingAnim_05": { "width": 22, "height": 22 },
+			"images/MatchingAnim_06": { "width": 22, "height": 22 },
+			"images/MatchingAnim_07": { "width": 22, "height": 22 },
+			"images/MatchingAnim_08": { "width": 22, "height": 22 },
+			"images/MatchingAnim_09": { "width": 22, "height": 22 },
+			"images/MatchingAnim_10": { "width": 22, "height": 22 }
+		}
+	}
+},
+"animations": {
+	"Match1": {
+		"slots": {
+			"Bg-Matching": {
+				"attachment": [
+					{ "time": 0, "name": "Bg-Matching" },
+					{ "time": 0.1667, "name": "Bg-Matching2" },
+					{ "time": 0.3333, "name": "Bg-Matching3" },
+					{ "time": 0.5, "name": "Bg-Matching4" },
+					{ "time": 0.6667, "name": "Bg-Matching4" }
+				]
+			}
+		}
+	},
+	"Match2": {
+		"slots": {
+			"Bg-MatchComplete": {
+				"attachment": [
+					{ "time": 0, "name": "Bg-ReadyFight" }
+				]
+			}
+		},
+		"bones": {
+			"MatchingComplete": {
+				"rotate": [
+					{ "time": 0, "angle": 0 },
+					{ "time": 0.0667, "angle": -20 },
+					{ "time": 0.1333, "angle": 20 },
+					{ "time": 0.2, "angle": -20 },
+					{ "time": 0.2667, "angle": 20 },
+					{ "time": 0.3333, "angle": 0, "curve": "stepped" },
+					{ "time": 0.6667, "angle": 0 }
+				]
+			}
+		}
+	},
+	"Match3": {
+		"slots": {
+			"MatchingAnim": {
+				"attachment": [
+					{ "time": 0, "name": "images/MatchingAnim_01" },
+					{ "time": 0.0333, "name": "images/MatchingAnim_02" },
+					{ "time": 0.0667, "name": "images/MatchingAnim_03" },
+					{ "time": 0.1, "name": "images/MatchingAnim_04" },
+					{ "time": 0.1333, "name": "images/MatchingAnim_05" },
+					{ "time": 0.1667, "name": "images/MatchingAnim_06" },
+					{ "time": 0.2, "name": "images/MatchingAnim_07" },
+					{ "time": 0.2333, "name": "images/MatchingAnim_08" },
+					{ "time": 0.2667, "name": "images/MatchingAnim_09" },
+					{ "time": 0.3, "name": "images/MatchingAnim_10" },
+					{ "time": 0.3333, "name": "images/MatchingAnim_01" }
+				]
+			}
+		}
+	}
+}
+}

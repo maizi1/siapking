@@ -49,6 +49,6 @@ export default class Home extends cc.Component {
 
     goToVersus() {
         cc.audioEngine.playEffect(this.clickAudio, false);
-        cc.director.loadScene('versus');
+        cc.director.loadScene('pk');
     }
 }
