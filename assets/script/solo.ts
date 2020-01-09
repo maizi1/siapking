@@ -17,18 +17,16 @@ export default class Solo extends cc.Component {
     @property(cc.Node)
     pauseNode: cc.Node;
     @property(cc.Node)
-    readyNode: cc.Node;
-    @property(cc.Node)
-    goNode: cc.Node;
-    @property(cc.Node)
-    outLabelNode: cc.Node;
+    startNode: cc.Node;
     @property(cc.Node)
     scoreNode: cc.Node;
     @property(cc.Node)
-    homeBtn: cc.Node;
+    direction: cc.Node;
+    @property(cc.Node)
+    succeed: cc.Node;
 
     @property(cc.AudioClip)
-    readyGoAudio: cc.AudioClip;
+    readyAudio: cc.AudioClip;
     @property(cc.AudioClip)
     slapAudio: cc.AudioClip;
     @property(cc.AudioClip)
@@ -54,6 +52,9 @@ export default class Solo extends cc.Component {
     @property(cc.AudioClip)
     scoreGrade06: cc.AudioClip;
 
+    @property(cc.SpriteFrame)
+    starhi: cc.SpriteFrame;
+
     score: string = '';
     maxSlapNum: number = 37;
     slapNum: number = 0;
@@ -62,28 +63,39 @@ export default class Solo extends cc.Component {
     isPause: boolean = false;
     onTimer: (dt: number) => number[];
 
+    isReady: boolean = true;
+
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad() {
-        this.onTimer = this.handlerTimer(this.timer);
-        cc.tween(this.slapNumNode)
-            .to(0.5, { position: cc.v2(-7, -150) }, { easing: 'sineIn' })
-            .start();
-        cc.tween(this.readyNode)
-            .to(0.4, { position: cc.v2(0, -3) })
-            .delay(0.3)
-            .by(0.4, { position: cc.v2(-360) })
-            .start();
-        cc.tween(this.goNode)
-            .delay(1.1)
-            .to(0.4, { position: cc.v2(0, -3) })
-            .delay(0.3)
-            .by(0.4, { position: cc.v2(-360) })
-            .start();
-        cc.audioEngine.playEffect(this.readyGoAudio, false);
-    }
+    onLoad() {}
 
     start() {}
+
+    playStart() {
+        const [ready, go] = this.startNode.children;
+        const { tween } = cc;
+        cc.tween(this.slapNumNode)
+            .to(0.5, { position: cc.v2(-0, -330) }, { easing: 'sineIn' })
+            .start();
+        tween(this.startNode)
+            .to(0.6, { position: cc.v2(0, -35) })
+            .delay(1)
+            .to(0.6, { position: cc.v2(-670, -35) })
+            .start();
+        tween(ready)
+            .delay(0.8)
+            .to(0.2, { opacity: 0 })
+            .start();
+        tween(go)
+            .delay(0.9)
+            .to(0.3, { opacity: 255 })
+            .start();
+
+        this.scheduleOnce(() => {
+            cc.audioEngine.playEffect(this.readyAudio, false);
+            this.isReady = true;
+        }, 1.2);
+    }
 
     update(dt: number) {
         if (this.isStart) {
@@ -99,6 +111,14 @@ export default class Solo extends cc.Component {
 
     writeScore() {
         const { localStorage } = cc.sys;
+        let logs = localStorage.getItem('scores');
+        logs = logs ? JSON.parse(logs) : [];
+        let when = this.onTimer(0)
+        for (let i = 0; i < logs.length; i++) {
+            if (when > logs[i].when) {
+                return
+            }
+        }
         const date = new Date();
         let fmt = 'yyyy-MM-dd hh:mm';
         var o = {
@@ -127,14 +147,14 @@ export default class Solo extends cc.Component {
             when: this.onTimer(0),
             scors: this.score,
         };
-        let logs = localStorage.getItem('scores');
-        logs = logs ? JSON.parse(logs) : [];
+
         logs.push(scorsObj);
         localStorage.setItem('scores', JSON.stringify(logs));
         localStorage.setItem('score', this.score);
     }
 
     goToHome() {
+        cc.director.resume();
         cc.audioEngine.playEffect(this.clickAudio, false);
         cc.director.loadScene('home');
     }
@@ -146,7 +166,7 @@ export default class Solo extends cc.Component {
         const [slapLeft, slapRight, front] = this.slap.children;
         if (!this.isStart) {
             cc.tween(this.timer)
-                .to(0.2, { position: cc.v2(-125, 210) }, { easing: 'sineIn' })
+                .to(0.2, { position: cc.v2(-250, 480) }, { easing: 'sineIn' })
                 .start();
             this.isStart = true;
             front.active = false;
@@ -169,13 +189,57 @@ export default class Solo extends cc.Component {
         if (this.slapNum === this.maxSlapNum) {
             this.isStart = false;
             this.isOut = true;
-            this.onScore();
+            this.onSucceed();
             this.writeScore();
         } else {
             // 失败
             this.onOut();
-            // this.onScore();
+            // this.onSucceed();
         }
+    }
+
+    onSucceed() {
+        this.isStart = false;
+        this.isOut = true;
+        const ss = this.onTimer(0)[0];
+        const [skeletonNode, starNode] = this.succeed.children;
+        const skeleton = skeletonNode.getComponent(sp.Skeleton);
+        // const track = skeleton.addAnimation(0, 'animation', false, 0.6);
+        let path = '';
+        let starNum = 0;
+        if (ss < 10) {
+            path = 'huanguan';
+            starNum = Math.ceil(10 - ss);
+        } else if (ss < 15) {
+            path = 'jinpai';
+            starNum = Math.ceil(15 - ss);
+        } else if (ss < 25) {
+            path = 'yinpai';
+            starNum = Math.ceil((25 - ss) / 2);
+        }
+
+        const [bg, ...stars] = starNode.children;
+        skeleton.setStartListener(() => {
+            cc.loader.loadRes(
+                'image/succeed/' + (path || 'yinpai'),
+                cc.SpriteFrame,
+                (err, spr: cc.SpriteFrame) => {
+                    console.log(err);
+                    bg.getComponent(cc.Sprite).spriteFrame = spr;
+                    starNum = starNum > 5 ? 5 : starNum;
+                    for (let i = 0; i < starNum; i++) {
+                        stars[i].getComponent(cc.Sprite).spriteFrame = this.starhi;
+                    }
+                    cc.tween(starNode)
+                        .to(0.4, { position: cc.v2(0, 0) })
+                        .to(0.2, { rotation: 0 })
+                        .start();
+                    this.scheduleOnce(() => cc.director.loadScene('succeed'), 2.2)
+                    
+                }
+            );
+        });
+        this.succeed.active = true;
     }
 
     onScore() {
@@ -248,15 +312,10 @@ export default class Solo extends cc.Component {
     onOut() {
         const { out } = this;
         const { children } = out;
-        const difSlapNum = this.slapNum - this.maxSlapNum;
         this.isStart = false;
         this.isOut = true;
-        this.writeScore();
-        this.outLabelNode.children[0].getComponent(cc.Label).string = `距离成功${
-            difSlapNum > 0 ? '多' : '少'
-        }点击了${Math.abs(difSlapNum)}次\n点击右上方按钮重新开始`;
         cc.tween(out)
-            .to(0.6, { position: cc.v2(-550, -284) }, { easing: 'sineInOut' })
+            .to(0.6, { position: cc.v2(-1122, -595) }, { easing: 'sineInOut' })
             .start();
         cc.tween(children[1])
             .delay(1.2)
@@ -270,15 +329,12 @@ export default class Solo extends cc.Component {
             .delay(1.6)
             .by(0.4, { position: cc.v2(-380, 0) }, { easing: 'sineInOut' })
             .start();
-        cc.tween(this.outLabelNode)
-            .delay(1.6)
-            .to(0.4, { scale: 0.75 }, { easing: 'sineInOut' })
-            .start();
         cc.audioEngine.playEffect(this.whistleAudio, false);
         this.scheduleOnce(() => {
             cc.audioEngine.playEffect(this.outAudio, false);
         }, 0.8);
         this.slapNumLabel.node.opacity = 255;
+        this.scheduleOnce(() => cc.director.loadScene('fail'), 2.5)
     }
 
     onReset() {
@@ -291,13 +347,15 @@ export default class Solo extends cc.Component {
         cc.audioEngine.playEffect(this.clickAudio, false);
         if (this.isPause) {
             cc.director.resume();
-            this.pauseNode.active = false;
+            cc.tween(this.pauseNode).to(0.2, {position: cc.v2(900,0)}).start();
+            this.scheduleOnce(() => this.pauseNode.active = false, 0.23);
             this.isPause = false;
             return;
         }
         this.pauseNode.active = true;
+        cc.tween(this.pauseNode).to(0.2, {position: cc.v2(0,0)}).start();
         this.isPause = true;
-        cc.director.pause();
+        this.scheduleOnce(() => cc.director.pause(), 0.23);
     }
 
     handlerTimer(timerNode: cc.Node) {
@@ -308,7 +366,7 @@ export default class Solo extends cc.Component {
         let ss = 0;
         let mm = 0;
         cc.tween(timerNode)
-            .to(0.5, { position: cc.v2(-140, 210), rotation: 5 }, { easing: 'sineIn' })
+            .to(0.5, { position: cc.v2(-300, 500), rotation: 5 }, { easing: 'sineIn' })
             .start();
         return (dt: number) => {
             const _mm = dt * 100;
@@ -321,5 +379,12 @@ export default class Solo extends cc.Component {
             mmLabel.string = mm < 10 ? '0' + Math.round(mm) : '' + Math.round(mm);
             return [ss, mm];
         };
+    }
+
+    closeDirection() {
+        this.direction.active = false;
+        this.direction.destroy();
+        this.onTimer = this.handlerTimer(this.timer);
+        this.playStart();
     }
 }

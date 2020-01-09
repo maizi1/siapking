@@ -17,7 +17,7 @@ export default class NewClass extends cc.Component {
     @property(cc.Node)
     cardBox: cc.Node;
 
-    height: number = 180;
+    height: number = -80;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -36,6 +36,7 @@ export default class NewClass extends cc.Component {
                 card.setPosition(cc.v2(0, this.height));
                 this.height -= 85;
             });
+            this.cardBox.height = scores.length * 85 + 80
         }
     }
 

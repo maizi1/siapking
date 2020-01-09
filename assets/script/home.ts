@@ -1,9 +1,8 @@
-
 const { ccclass, property } = cc._decorator;
 @ccclass
 export default class Home extends cc.Component {
     @property(cc.Node)
-    gif: cc.Node;
+    gif: cc.Node = null;
     @property(cc.Label)
     score: cc.Label;
 
@@ -15,7 +14,8 @@ export default class Home extends cc.Component {
     languagePointer: number = 0;
 
     onLoad() {
-        this.score.string = cc.sys.localStorage.getItem('score') || 'F';
+        const scores = (JSON.parse(cc.sys.localStorage.getItem('scores')) || [])[0]
+        this.score.string = scores ? scores.when + '秒' : '';
         this.handlerGif(this.gif.children);
         cc.audioEngine.playEffect(this.bgAudio, true);
     }
@@ -39,16 +39,16 @@ export default class Home extends cc.Component {
 
     startGame() {
         cc.audioEngine.playEffect(this.clickAudio, false);
-        cc.director.loadScene('solo');
+        window.Global.gotoRoad('solo');
     }
 
     goToStandings() {
         cc.audioEngine.playEffect(this.clickAudio, false);
-        cc.director.loadScene('standings');
+        window.Global.gotoRoad('standings');
     }
 
     goToVersus() {
         cc.audioEngine.playEffect(this.clickAudio, false);
-        cc.director.loadScene('pk');
+        window.Global.gotoRoad('pk');
     }
 }

@@ -24667,3 +24667,13 @@ declare let CC_WECHATGAME: boolean;
 declare let CC_QQPLAY: boolean;
 
 declare function require(params:string): { [index: string]: any };
+
+interface Window  {
+    Global: {
+        /**
+		!#zh 通过场景名称进行预加载场景， 显示进度条，加载完成后跳转到目标场景
+		@param sceneName The name of the scene to load.
+		*/
+        gotoRoad(sceneName: string): void;
+    }
+}

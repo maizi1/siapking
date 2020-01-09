@@ -1,0 +1,41 @@
+
+skeleton.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+jsdhwin
+  rotate: false
+  xy: 1392, 807
+  size: 259, 129
+  orig: 259, 129
+  offset: 0, 0
+  index: -1
+jsdhwincdd
+  rotate: false
+  xy: 640, 498
+  size: 750, 438
+  orig: 750, 438
+  offset: 0, 0
+  index: -1
+jsdhwinjpai
+  rotate: false
+  xy: 2, 2
+  size: 277, 296
+  orig: 277, 296
+  offset: 0, 0
+  index: -1
+jsdhwinkuan
+  rotate: false
+  xy: 640, 322
+  size: 649, 174
+  orig: 649, 174
+  offset: 0, 0
+  index: -1
+jsdhwinxunzg
+  rotate: false
+  xy: 2, 300
+  size: 636, 636
+  orig: 636, 636
+  offset: 0, 0
+  index: -1
